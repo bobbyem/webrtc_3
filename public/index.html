@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WEBRTC</title>
+    <script
+      src="https://cdn.socket.io/4.6.0/socket.io.min.js"
+      integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
+      crossorigin="anonymous"
+    ></script>
+    <script src="main.js" defer></script>
+  </head>
+  <body>
+    <div class="videos-container">
+      <video id="localVideo" src="" autoplay="true" controls muted></video>
+      <video id="remoteVideo" src="" autoplay="true" controls muted></video>
+    </div>
+    <button id="share">Share</button>
+    <div id="membersDisplay"></div>
+  </body>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    .videos-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 10px;
+    }
+
+    .videos-container video {
+      width: 100%;
+      height: auto;
+    }
+
+    .overlay {
+      background-color: white;
+    }
+  </style>
+</html>
