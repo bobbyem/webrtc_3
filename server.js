@@ -52,6 +52,16 @@ io.on("connect", (socket) => {
   });
 });
 
+io.of("/").adapter.on("leave-room", (room, id) => {
+  const socketsStillInRoom = [...io.sockets.adapter.rooms.get(room)];
+  console.log(
+    "🚀 ~ file: server.js:58 ~ io.of ~ socketsStillInRoom:",
+    socketsStillInRoom
+  );
+
+  io.to(room).emit("members", socketsStillInRoom);
+});
+
 /* ------------------------------- middleware ------------------------------- */
 app.use(express.static("public"));
 

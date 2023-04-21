@@ -14,7 +14,7 @@ const iceServer = {
   ],
 };
 
-const socket = io("http://localhost:5000/");
+const socket = io("http://:5000/");
 const STATE = {
   connections: [],
   localStream: null,
@@ -52,6 +52,8 @@ function sendOffer({ pc, socketId }) {
 }
 
 async function handleMembers(members) {
+  updateDisplay();
+  console.log("🚀 ~ file: main.js:55 ~ handleMembers ~ members:", members);
   STATE.connections = STATE.connections.filter((connection) =>
     members.includes(connection.socketId)
   );
@@ -175,6 +177,7 @@ function handleCandidate(payload) {
 
 function updateDisplay(connections) {
   const memberDisplay = document.querySelector("#membersDisplay");
+  if (!connections) return (membersDisplay.innerHTML = "");
   if (memberDisplay) memberDisplay.innerHTML = "";
 
   connections.forEach((connection) => {
