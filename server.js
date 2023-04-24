@@ -23,7 +23,7 @@ const server = app.listen(CONFIG.EXPRESS_PORT, () =>
 );
 const socketServerOptions = {
   cors: true,
-  origin: ["http://localhost:3000", "https://webrct.onrender.com:3000"],
+  origin: ["http://localhost:3000", "https://webrct.onrender.com:3000", "*"],
 };
 const io = new Server(server, socketServerOptions);
 console.log("🚀 ~ file: server.js:20 ~ CONFIG:", CONFIG);
