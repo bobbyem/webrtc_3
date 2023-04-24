@@ -14,8 +14,9 @@ const iceServer = {
   ],
 };
 
-// const socket = io("http://localhost:5000");
-const socket = io("https://webrct.onrender.com:5000");
+// const socket = io("http://localhost:3000");
+const socket = io("https://webrct.onrender.com:3000");
+
 const STATE = {
   connections: [],
   localStream: null,

@@ -5,18 +5,27 @@ const colors = require("colors");
 const { createServer } = require("http");
 
 /* -------------------------------- Variables ------------------------------- */
-const app = express();
-const httpServer = createServer();
-const socketServerOptions = {
-  cors: {
-    origin: "*",
-  },
-};
-const io = new Server(httpServer, socketServerOptions);
 const CONFIG = {
   EXPRESS_PORT: process.env.EXPRESS_PORT || 3000,
   WSS_PORT: process.env.WSS_PORT || 5000,
 };
+const app = express();
+// const httpServer = createServer(app);
+const server = app.listen(CONFIG.EXPRESS_PORT, () =>
+  console.log(
+    colors.bgGreen(
+      "😀 Server started at:",
+      new Date(),
+      "On port:",
+      CONFIG.EXPRESS_PORT
+    )
+  )
+);
+const socketServerOptions = {
+  cors: true,
+  origin: ["http://localhost:3000", "https://webrct.onrender.com:3000"],
+};
+const io = new Server(server, socketServerOptions);
 console.log("🚀 ~ file: server.js:20 ~ CONFIG:", CONFIG);
 
 //Middleware
@@ -67,14 +76,4 @@ io.of("/").adapter.on("leave-room", (room, id) => {
 app.use(express.static("public"));
 
 /* --------------------------- server init/listen --------------------------- */
-io.listen(CONFIG.WSS_PORT);
-app.listen(CONFIG.EXPRESS_PORT, () =>
-  console.log(
-    colors.bgGreen(
-      "😀 Server started at:",
-      new Date(),
-      "On port:",
-      CONFIG.EXPRESS_PORT
-    )
-  )
-);
+// io.listen(CONFIG.WSS_PORT);
