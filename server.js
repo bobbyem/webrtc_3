@@ -6,7 +6,7 @@ const { createServer } = require("http");
 
 /* -------------------------------- Variables ------------------------------- */
 const CONFIG = {
-  EXPRESS_PORT: process.env.EXPRESS_PORT || 3000,
+  EXPRESS_PORT: process.env === "production" ? 80 : 3000,
   WSS_PORT: process.env.WSS_PORT || 5000,
 };
 const app = express();
