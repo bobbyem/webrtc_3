@@ -17,6 +17,7 @@ const CONFIG = {
   EXPRESS_PORT: process.env.EXPRESS_PORT || 3000,
   WSS_PORT: process.env.WSS_PORT || 5000,
 };
+console.log("🚀 ~ file: server.js:20 ~ CONFIG:", CONFIG);
 
 //Middleware
 io.on("connect", (socket) => {
