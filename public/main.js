@@ -230,3 +230,6 @@ socket.on("answer", (payload) => handleAnswer(payload));
 socket.on("candidate", (payload) => handleCandidate(payload));
 socket.on("members", (members) => handleMembers(members));
 socket.on("socketId", (socketId) => (STATE.mySocketId = socketId));
+socket.on("connect_error", (err) => {
+  console.log(`connect_error due to ${err.message}`);
+});
