@@ -10,34 +10,62 @@
       integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
       crossorigin="anonymous"
     ></script>
-    <script src="main.js" defer></script>
   </head>
   <body>
-    <div class="videos-container">
-      <video id="localVideo" src="" autoplay="true" controls muted></video>
-      <video id="remoteVideo" src="" autoplay="true" controls muted></video>
+    <div>
+      <video
+        id="primaryVideoWindow"
+        src=""
+        autoplay="true"
+        controls
+        muted
+      ></video>
     </div>
+    <h1 id="socketIdDisplay"></h1>
     <button id="share">Share</button>
     <div id="membersDisplay"></div>
+    <script src="main.js" defer type="module"></script>
   </body>
   <style>
     * {
       box-sizing: border-box;
     }
 
-    .videos-container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-gap: 10px;
-    }
-
-    .videos-container video {
+    video {
       width: 100%;
-      height: auto;
+    }
+    #membersDisplay {
+      width: 100%;
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
     }
 
-    .overlay {
+    .memberContainer {
+      padding-top: 1rem;
+      width: 300px;
+      gap: 2rem;
+      display: flex;
+      flex-direction: column;
       background-color: white;
+      border: 2px solid black;
+      border-radius: 1rem;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .memberContainer video {
+      width: 80%;
+    }
+
+    .memberContainer:hover {
+      background-color: grey;
+      transition: 0.5s;
+    }
+
+    .selected {
+      background-color: grey;
+      border: green;
     }
   </style>
 </html>

@@ -26,7 +26,6 @@ const socketServerOptions = {
   origin: ["https://webrct.onrender.com", "http://localhost:3000"],
 };
 const io = new Server(server, socketServerOptions);
-console.log("🚀 ~ file: server.js:20 ~ CONFIG:", CONFIG);
 
 //Middleware
 io.on("connect", (socket) => {

@@ -1,3 +1,12 @@
+import {
+  createMemberElement,
+  findMemberVideoElement,
+  handleSelectVideo,
+  removeDeadMembersElements,
+  updateMembersDisplay,
+  updateSocketIdDisplay,
+} from "./utils.js";
+
 const iceServer = {
   urls: [
     "stun.freecall.com:3478",
@@ -14,7 +23,7 @@ const iceServer = {
   ],
 };
 
-// const socket = io("http://localhost:3000");
+// const socket = io("192.168.50.80:3000");
 const socket = io("https://webrct.onrender.com");
 
 const STATE = {
@@ -35,7 +44,6 @@ async function call(connection) {
   sendOffer({ pc, socketId });
 }
 
-//Create offer
 function sendOffer({ pc, socketId }) {
   const offer = pc
     .createOffer({ offerToReceiveVideo: true })
@@ -54,18 +62,14 @@ function sendOffer({ pc, socketId }) {
 }
 
 async function handleMembers(members) {
-  updateDisplay();
-  console.log("🚀 ~ file: main.js:55 ~ handleMembers ~ members:", members);
+  console.log("🚀 ~ file: main.js:63 ~ handleMembers ~ members:", members);
   STATE.connections = STATE.connections.filter((connection) =>
     members.includes(connection.socketId)
   );
 
-  members.map(async (member) => {
+  await members.map(async (member) => {
     const { connections } = STATE;
-    if (
-      connections.find((connection) => connection.socketId === member) ||
-      member === STATE.mySocketId
-    )
+    if (connections.find((connection) => connection.socketId === member))
       return;
 
     const newConnection = {
@@ -74,20 +78,14 @@ async function handleMembers(members) {
     };
 
     newConnection.pc.ontrack = (event) => {
+      if (member === STATE.mySocketId) return;
       console.log("🚀 ~ file: main.js:88 ~ ontrack ~ event:", event);
-      document.querySelector("#remoteVideo").srcObject = event.streams[0];
-
-      const idDisplayElement = document.createElement("p");
-      idDisplayElement.textContent = member;
-      const remoteVideoElement = document.querySelector("#remoteVideo");
-      idDisplayElement.style.position = "absolute";
-      idDisplayElement.style.top = remoteVideoElement.offsetTop + "px";
-      idDisplayElement.style.left = remoteVideoElement.offsetLeft + "px";
-      idDisplayElement.className = "overlay";
-      document.body.appendChild(idDisplayElement);
+      const memberVideo = findMemberVideoElement(member);
+      memberVideo.srcObject = event.streams[0];
     };
 
     newConnection.pc.onicecandidate = (event) => {
+      if (member === STATE.mySocketId) return;
       if (!event.candidate) return;
       const payload = {
         target: newConnection.socketId,
@@ -99,6 +97,7 @@ async function handleMembers(members) {
     };
 
     newConnection.pc.onnegotiationneeded = (event) => {
+      if (member === STATE.mySocketId) return;
       console.log(
         "🚀 ~ file: main.js:36 ~ onnegotiationneeded ~ event:",
         event
@@ -106,9 +105,27 @@ async function handleMembers(members) {
       sendOffer({ pc: newConnection.pc, socketId: newConnection.socketId });
     };
 
+    newConnection.onconnectionstatechange = (event) => {
+      debugger;
+      console.log(
+        "🚀 ~ file: main.js:110 ~ oniceconnectionstatechange ~ event:",
+        event
+      );
+      if (newConnection.iceConnectionState === "disconnected") {
+      }
+    };
+
+    if (STATE.localStream) {
+      const track = STATE.localStream.getTracks()[0];
+      console.log("🚀 ~ file: main.js:120 ~ awaitmembers.map ~ track:", track);
+
+      newConnection.pc.addTrack(track, STATE.localStream);
+    }
+
     STATE.connections.push(newConnection);
-    updateDisplay(STATE.connections);
   });
+
+  updateDisplay(STATE.connections);
 }
 
 function handleOffer(payload) {
@@ -178,38 +195,32 @@ function handleCandidate(payload) {
 }
 
 function updateDisplay(connections) {
-  const memberDisplay = document.querySelector("#membersDisplay");
-  if (!connections) return (membersDisplay.innerHTML = "");
-  if (memberDisplay) memberDisplay.innerHTML = "";
+  console.log(
+    "🚀 ~ file: main.js:180 ~ updateDisplay ~ connections:",
+    connections
+  );
 
-  connections.forEach((connection) => {
-    const memberItem = document.createElement("div");
-    const paragraph = document.createElement("p");
-    const callBtn = document.createElement("button");
-    /* ------------------------------- add content ------------------------------ */
-    memberItem.id = connection.socketId;
-    paragraph.textContent = connection.socketId;
-    callBtn.textContent = "Call";
+  removeDeadMembersElements(connections);
 
-    /* ----------------------------- button listener ---------------------------- */
-    callBtn.addEventListener("click", () => call(connection));
-
-    /* --------------------------------- append --------------------------------- */
-    memberItem.appendChild(callBtn);
-    memberItem.appendChild(paragraph);
-    memberDisplay?.appendChild(memberItem);
-  });
+  updateMembersDisplay(connections);
+  // connections.map((connection) => {
+  //   const memberElement = createMemberElement(connection.socketId);
+  //   memberDisplay?.appendChild(memberElement);
+  // });
 }
 
 async function shareScreen() {
   try {
     const stream = await navigator.mediaDevices.getDisplayMedia({
-      video: true,
+      video: { width: 1280, height: 720 },
     });
 
     STATE.localStream = stream;
 
-    document.querySelector("#localVideo").srcObject = stream;
+    const myVideo = findMemberVideoElement(STATE.mySocketId);
+    console.log("🚀 ~ file: main.js:216 ~ shareScreen ~ myVideo:", myVideo);
+
+    myVideo.srcObject = stream;
 
     STATE.connections.forEach((connection) => {
       if (connection.pc) {
@@ -230,7 +241,10 @@ socket.on("offer", (payload) => handleOffer(payload));
 socket.on("answer", (payload) => handleAnswer(payload));
 socket.on("candidate", (payload) => handleCandidate(payload));
 socket.on("members", (members) => handleMembers(members));
-socket.on("socketId", (socketId) => (STATE.mySocketId = socketId));
+socket.on("socketId", (socketId) => {
+  STATE.mySocketId = socketId;
+  updateSocketIdDisplay(STATE.mySocketId);
+});
 socket.on("connect_error", (err) => {
   console.log(`connect_error due to ${err.message}`);
 });
