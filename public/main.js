@@ -1,3 +1,4 @@
+import { stun } from "./stun.js";
 import {
   createMemberElement,
   findMemberVideoElement,
@@ -8,19 +9,7 @@ import {
 } from "./utils.js";
 
 const iceServer = {
-  urls: [
-    "stun.freecall.com:3478",
-    "stun.freeswitch.org:3478",
-    "stun.freevoipdeal.com:3478",
-    "stun.gmx.de:3478",
-    "stun.gmx.net:3478",
-    "stun.gradwell.com:3478",
-    "stun.halonet.pl:3478",
-    "stun.hellonanu.com:3478",
-    "stun.hoiio.com:3478",
-    "stun.hosteurope.de:3478",
-    "stun.ideasip.com:3478",
-  ],
+  urls: stun,
 };
 
 // const socket = io("192.168.50.80:3000");
