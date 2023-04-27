@@ -90,20 +90,20 @@ export function updateSocketIdDisplay(socketId) {
 }
 
 export async function shareCamera() {
-  await navigator.mediaDevices
-    .getUserMedia({
-      audio: true,
-      video: true,
-    })
-    .then((stream) => {
-      STATE.localStream = stream;
-      STATE.connections.forEach((connection) => {
-        if (connection.pc) {
-          connection.pc.addTrack(stream.getTracks()[0], stream);
-        }
-      });
-    })
-    .catch((error) => console.error(error));
+  const stream = await navigator.mediaDevices.getUserMedia({
+    audio: true,
+    video: true,
+  });
+
+  if (stream) {
+    alert("Should share your camera");
+    STATE.localStream = stream;
+    STATE.connections.forEach((connection) => {
+      if (connection.pc) {
+        connection.pc.addTrack(stream.getTracks()[0], stream);
+      }
+    });
+  }
 }
 
 function deselectAll() {
