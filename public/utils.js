@@ -1,4 +1,4 @@
-import { STATE } from "./main";
+import { STATE } from "./main.js";
 
 export function createMemberElement(id) {
   console.log("🚀 ~ file: utils.js:2 createMemberElement id:", id);
