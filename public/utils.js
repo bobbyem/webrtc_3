@@ -1,3 +1,5 @@
+import { STATE } from "./main";
+
 export function createMemberElement(id) {
   console.log("🚀 ~ file: utils.js:2 createMemberElement id:", id);
 
@@ -87,9 +89,39 @@ export function updateSocketIdDisplay(socketId) {
   socketIdDisplay.textContent = socketId;
 }
 
+export async function shareCamera() {
+  await navigator.mediaDevices
+    .getUserMedia({
+      audio: true,
+      video: true,
+    })
+    .then((stream) => {
+      STATE.localStream = stream;
+      STATE.connections.forEach((connection) => {
+        if (connection.pc) {
+          connection.pc.addTrack(stream.getTracks()[0], stream);
+        }
+      });
+    })
+    .catch((error) => console.error(error));
+}
+
 function deselectAll() {
   const selected = document.getElementsByClassName("selected");
   for (let i = 0; i < selected.length; i++) {
     selected[i].classList.remove("selected");
   }
+}
+
+export function hasShareScreenSupport() {
+  return navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia;
+}
+
+export async function hasWebCamSupport() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    return false;
+  }
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  const videoInputs = devices.filter((device) => device.kind === "videoinput");
+  return videoInputs.length > 0;
 }

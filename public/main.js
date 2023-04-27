@@ -2,7 +2,10 @@ import {
   createMemberElement,
   findMemberVideoElement,
   handleSelectVideo,
+  hasShareScreenSupport,
+  hasWebCamSupport,
   removeDeadMembersElements,
+  shareCamera,
   updateMembersDisplay,
   updateSocketIdDisplay,
 } from "./utils.js";
@@ -38,7 +41,7 @@ const iceServer = {
 // const socket = io("192.168.50.80:3000");
 const socket = io("https://webrct.onrender.com");
 
-const STATE = {
+export const STATE = {
   connections: [],
   localStream: null,
   mySocketId: null,
@@ -244,7 +247,23 @@ async function shareScreen() {
   }
 }
 
-document.querySelector("#share")?.addEventListener("click", shareScreen);
+async function init() {
+  const screen = hasShareScreenSupport();
+  if (!screen) {
+    alert("Your browser does not support screen sharing");
+    document.getElementById("shareScreen").disabled = true;
+    return;
+  }
+  const webcam = await hasWebCamSupport();
+  if (!webcam) {
+    alert("Your browser does not seem to support webcam");
+    document.getElementById("shareCam").disabled = true;
+    return;
+  }
+}
+
+document.querySelector("#shareScreen")?.addEventListener("click", shareScreen);
+document.querySelector("#shareCam")?.addEventListener("click", shareCamera);
 
 socket.on("connect", () => {
   socket.emit("joinRoom", STATE.roomId);
@@ -260,3 +279,5 @@ socket.on("socketId", (socketId) => {
 socket.on("connect_error", (err) => {
   console.log(`connect_error due to ${err.message}`);
 });
+
+init();
