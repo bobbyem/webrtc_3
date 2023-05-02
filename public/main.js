@@ -20,21 +20,21 @@ const iceServer = {
       username: "cc347fe19af50ac013cb7699",
       credential: "4UOGvKP33Mduvlmf",
     },
-    {
-      urls: "turn:a.relay.metered.ca:80?transport=tcp",
-      username: "cc347fe19af50ac013cb7699",
-      credential: "4UOGvKP33Mduvlmf",
-    },
-    {
-      urls: "turn:a.relay.metered.ca:443",
-      username: "cc347fe19af50ac013cb7699",
-      credential: "4UOGvKP33Mduvlmf",
-    },
-    {
-      urls: "turn:a.relay.metered.ca:443?transport=tcp",
-      username: "cc347fe19af50ac013cb7699",
-      credential: "4UOGvKP33Mduvlmf",
-    },
+    // {
+    //   urls: "turn:a.relay.metered.ca:80?transport=tcp",
+    //   username: "cc347fe19af50ac013cb7699",
+    //   credential: "4UOGvKP33Mduvlmf",
+    // },
+    // {
+    //   urls: "turn:a.relay.metered.ca:443",
+    //   username: "cc347fe19af50ac013cb7699",
+    //   credential: "4UOGvKP33Mduvlmf",
+    // },
+    // {
+    //   urls: "turn:a.relay.metered.ca:443?transport=tcp",
+    //   username: "cc347fe19af50ac013cb7699",
+    //   credential: "4UOGvKP33Mduvlmf",
+    // },
   ],
 };
 
@@ -226,10 +226,8 @@ function updateDisplay(connections) {
 
 async function shareScreen() {
   try {
-    const stream = await navigator.mediaDevices.getDisplayMedia({
-      video: { width: 1280, height: 720 },
-    });
-
+    console.log(STATE);
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     STATE.localStream = stream;
 
     const myVideo = findMemberVideoElement(STATE.mySocketId);
@@ -280,4 +278,4 @@ socket.on("connect_error", (err) => {
   console.log(`connect_error due to ${err.message}`);
 });
 
-init();
+// init();
