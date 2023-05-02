@@ -249,13 +249,11 @@ async function shareScreen() {
 async function init() {
   const screen = hasShareScreenSupport();
   if (!screen) {
-    alert("Your browser does not support screen sharing");
     document.getElementById("shareScreen").disabled = true;
     return;
   }
   const webcam = await hasWebCamSupport();
   if (!webcam) {
-    alert("Your browser does not seem to support webcam");
     document.getElementById("shareCam").disabled = true;
     return;
   }
