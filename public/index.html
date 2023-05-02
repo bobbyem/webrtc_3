@@ -15,10 +15,10 @@
     <div>
       <video
         id="primaryVideoWindow"
-        src=""
         autoplay="true"
         controls
         muted
+        preload="none"
       ></video>
     </div>
     <h1 id="socketIdDisplay"></h1>
@@ -34,6 +34,9 @@
 
     video {
       width: 100%;
+    }
+    #primaryVideoWindow {
+      background-color: black;
     }
 
     #membersDisplay {

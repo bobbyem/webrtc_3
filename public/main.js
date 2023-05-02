@@ -15,16 +15,16 @@ const iceServer = {
     {
       urls: "stun:a.relay.metered.ca:80",
     },
-    {
-      urls: "turn:a.relay.metered.ca:80",
-      username: "cc347fe19af50ac013cb7699",
-      credential: "4UOGvKP33Mduvlmf",
-    },
-    {
-      urls: "turn:a.relay.metered.ca:80?transport=tcp",
-      username: "cc347fe19af50ac013cb7699",
-      credential: "4UOGvKP33Mduvlmf",
-    },
+    // {
+    //   urls: "turn:a.relay.metered.ca:80",
+    //   username: "cc347fe19af50ac013cb7699",
+    //   credential: "4UOGvKP33Mduvlmf",
+    // },
+    // {
+    //   urls: "turn:a.relay.metered.ca:80?transport=tcp",
+    //   username: "cc347fe19af50ac013cb7699",
+    //   credential: "4UOGvKP33Mduvlmf",
+    // },
     // {
     //   urls: "turn:a.relay.metered.ca:443",
     //   username: "cc347fe19af50ac013cb7699",
