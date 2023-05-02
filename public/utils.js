@@ -118,6 +118,7 @@ function deselectAll() {
 }
 
 export function hasShareScreenSupport() {
+  console.log(navigator.mediaDevices, navigator.mediaDevices.getDisplayMedia);
   return navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia;
 }
 

@@ -38,7 +38,7 @@ const iceServer = {
   ],
 };
 
-// const socket = io("192.168.50.80:3000");
+// const socket = io("http://localhost:3000");
 const socket = io("https://webrct.onrender.com");
 
 export const STATE = {
@@ -226,8 +226,9 @@ function updateDisplay(connections) {
 
 async function shareScreen() {
   try {
-    console.log(STATE);
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    const stream = await navigator.mediaDevices.getDisplayMedia({
+      video: true,
+    });
     STATE.localStream = stream;
 
     const myVideo = findMemberVideoElement(STATE.mySocketId);
@@ -278,4 +279,4 @@ socket.on("connect_error", (err) => {
   console.log(`connect_error due to ${err.message}`);
 });
 
-// init();
+init();
