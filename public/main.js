@@ -16,7 +16,7 @@ const iceServer = {
       urls: "stun:a.relay.metered.ca:80",
     },
     {
-      urls: "turn:10.201.222.136:3478?transport=udp",
+      urls: "turns:10.201.126.204:3478?transport=udp",
       username: "username",
       credential: "password",
     },
