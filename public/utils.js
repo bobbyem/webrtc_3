@@ -11,6 +11,7 @@ export function createMemberElement(id) {
   videoElement.autoplay = true;
   videoElement.muted = true;
   videoElement.controls = false;
+  videoElement.playsInline = true;
   memberElement.appendChild(videoElement);
 
   const memberId = document.createElement("p");

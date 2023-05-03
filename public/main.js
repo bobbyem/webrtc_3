@@ -35,6 +35,11 @@ const iceServer = {
     //   username: "cc347fe19af50ac013cb7699",
     //   credential: "4UOGvKP33Mduvlmf",
     // },
+    {
+      urls: "turn:127.0.0.1:3478?transport=udp",
+      username: "username",
+      credential: "password",
+    },
   ],
 };
 
